@@ -2,12 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NotistackProvider from "./providers/NotiStackProvider";
+import { Box } from "@mui/material";
 
 const inter = Inter({ subsets: ["latin"] });
-
-const style = {
-  backgroundImage: "url('/Img.png')",
-};
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +18,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className} style={style}>
+      <body className={inter.className}>
+        <Box
+          sx={{
+            backgroundImage: "url('/Img.png')",
+            backgroundRepeat: "round",
+            width: "30%",
+            height: "30%",
+            position: "absolute",
+            zIndex: -1,
+          }}
+        ></Box>
+        <Box
+          sx={{
+            backgroundImage: "url('/Bg.png')",
+            backgroundRepeat: "round",
+            width: "30%",
+            height: "30%",
+            position: "absolute",
+            zIndex: -1,
+            right: 0,
+            bottom: 0,
+          }}
+        ></Box>
         <NotistackProvider>{children}</NotistackProvider>
       </body>
     </html>

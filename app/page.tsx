@@ -15,6 +15,7 @@ import NewAppointmentModal from "./components/NewAppointmentModal";
 import { enqueueSnackbar } from "notistack";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+import Image from "next/image";
 
 export default function Home() {
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -70,7 +71,7 @@ export default function Home() {
       <Container>
         <Container
           sx={{
-            paddingY: 5,
+            paddingY: 2,
             paddingX: 10,
             border: 1,
             borderColor: "#0101",
@@ -78,6 +79,9 @@ export default function Home() {
             borderRadius: 5,
           }}
         >
+          <Box textAlign="center">
+            <Image alt="logo" src="/Logo.png" width={500} height={200} />
+          </Box>
           <Grid container justifyContent="center" alignItems="center" mb={5}>
             <Grid item>
               <Typography
