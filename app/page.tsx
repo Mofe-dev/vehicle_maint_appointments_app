@@ -13,6 +13,8 @@ import AppointmentsTable from "./components/AppointmentsTable";
 import { API_URL } from "./utils/const";
 import NewAppointmentModal from "./components/NewAppointmentModal";
 import { enqueueSnackbar } from "notistack";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 
 export default function Home() {
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -66,50 +68,60 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <Container>
-        <Typography
-          gutterBottom
-          variant="h4"
-          component="div"
-          textAlign="center"
-        >
-          Aplicacion de reserva de citas para mantenimiento de autos
-        </Typography>
-
         <Container
           sx={{
             paddingY: 5,
             paddingX: 10,
             border: 1,
             borderColor: "#0101",
+            backgroundColor: "white",
             borderRadius: 5,
           }}
         >
-          <Grid container justifyContent="flex-end" alignItems="center" mb={5}>
+          <Grid container justifyContent="center" alignItems="center" mb={5}>
+            <Grid item>
+              <Typography
+                gutterBottom
+                variant="h4"
+                component="div"
+                textAlign="center"
+              >
+                Aplicación de reserva de citas para mantenimiento de autos
+              </Typography>
+            </Grid>
             <Grid item>
               <Button
                 type="submit"
                 variant="contained"
                 onClick={handleNewAppointments}
+                startIcon={<AddCircleOutlinedIcon />}
               >
                 Agendar nueva cita
               </Button>
             </Grid>
           </Grid>
 
-          <Card>
+          <Card
+            sx={{
+              border: 1,
+              borderColor: "#0101",
+              backgroundColor: "white",
+              borderRadius: 5,
+            }}
+          >
             <CardContent>
               <Typography gutterBottom variant="h4" component="div">
                 Buscador de citas
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Ingrese la informacion solicitada para ver informacion de sus
+              <Typography variant="body1" color="text.secondary">
+                Ingrese la información solicitada para ver información de sus
                 citas
               </Typography>
               <form onSubmit={formik.handleSubmit}>
                 <Grid container mt={2}>
                   <Grid item>
                     <Typography gutterBottom variant="h6" component="div">
-                      Numero de la placa
+                      Número de la placa <b style={{ color: "red" }}>*</b>
                     </Typography>
                     <TextField
                       {...formik.getFieldProps("plateNumber")}
@@ -122,16 +134,18 @@ export default function Home() {
 
                 <Grid container justifyContent="flex-end" alignItems="center">
                   <Grid item>
-                    <Button type="submit" variant="contained">
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      disabled={!formik.values.plateNumber}
+                      startIcon={<SearchOutlinedIcon />}
+                    >
                       Buscar cita
                     </Button>
                   </Grid>
                 </Grid>
               </form>
             </CardContent>
-            {/* <CardActions sx={{ display: "flex", justifyContent: "end" }}>
-       
-        </CardActions> */}
           </Card>
           {open && (
             <NewAppointmentModal
