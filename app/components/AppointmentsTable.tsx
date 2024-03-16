@@ -1,4 +1,5 @@
 import {
+  Chip,
   Divider,
   Paper,
   Table,
@@ -43,7 +44,11 @@ const AppointmentsTable: FC<TableProps> = ({ appointments }) => {
 
                 <TableCell align="right">{row.Hour}</TableCell>
                 <TableCell align="right">
-                  {row.Status ? "Activo" : "Inactivo"}
+                  {row.Status ? (
+                    <Chip label="Activo" color="success" />
+                  ) : (
+                    <Chip label="Inactivo" color="error" />
+                  )}
                 </TableCell>
               </TableRow>
             ))}

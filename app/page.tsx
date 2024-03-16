@@ -7,11 +7,12 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Container, Grid, TextField } from "@mui/material";
+import { Box, Container, Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import AppointmentsTable from "./components/AppointmentsTable";
 import { API_URL } from "./utils/const";
 import NewAppointmentModal from "./components/NewAppointmentModal";
+import { enqueueSnackbar } from "notistack";
 
 export default function Home() {
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -48,7 +49,13 @@ export default function Home() {
       .then(({ Data }: any) => {
         console.log(Data);
         if (Data && Data.length > 0) setAppointments([...Data]);
-        else setNotFound(true);
+        else {
+          setAppointments([]);
+          enqueueSnackbar("No existen registros para este # de placa", {
+            variant: "info",
+          });
+          setNotFound(true);
+        }
       });
   };
 
@@ -136,7 +143,11 @@ export default function Home() {
           {appointments && appointments.length > 0 && (
             <AppointmentsTable appointments={appointments} />
           )}
-          {notFound && <>No se encontraron registros</>}
+          {notFound && (
+            <Box textAlign="center" mt={5} sx={{ color: "red" }}>
+              <b>No se encontraron registros</b>
+            </Box>
+          )}
         </Container>
       </Container>
     </main>

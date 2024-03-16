@@ -57,6 +57,9 @@ const NewAppointmentModal: FC<ModalProps> = ({ open, closeModal }) => {
         body: JSON.stringify(payload),
       }).then((response) => {
         if (response.status === 200) {
+          enqueueSnackbar("Cita creada con exito!", {
+            variant: "success",
+          });
           closeModal();
         }
       });
