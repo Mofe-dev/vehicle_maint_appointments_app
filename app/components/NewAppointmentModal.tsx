@@ -13,6 +13,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { dateFormat, hourFormat } from "../utils/formats";
 import { enqueueSnackbar } from "notistack";
 import { API_URL } from "../utils/const";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 
 const style = {
   position: "absolute" as "absolute",
@@ -89,13 +90,13 @@ const NewAppointmentModal: FC<ModalProps> = ({ open, closeModal }) => {
           Registrar cita
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Ingrese la informacion solicitada para agendar su nueva citas
+          Ingrese la información solicitada para agendar su nueva citas
         </Typography>
         <form onSubmit={formik.handleSubmit}>
           <Grid container gap={2} mt={2} mb={5}>
             <Grid item>
               <Typography gutterBottom variant="h6" component="div">
-                Numero de la placa
+                Número de la placa <b style={{ color: "red" }}>*</b>
               </Typography>
               <TextField
                 {...formik.getFieldProps("plateNumber")}
@@ -112,7 +113,7 @@ const NewAppointmentModal: FC<ModalProps> = ({ open, closeModal }) => {
             <Grid item>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Typography gutterBottom variant="h6" component="div">
-                  Fecha de la reserva
+                  Fecha de la reserva <b style={{ color: "red" }}>*</b>
                 </Typography>
                 <DatePicker onChange={handleDateChange} format="DD/MM/YYYY" />
                 {formik.errors.date ? (
@@ -128,7 +129,7 @@ const NewAppointmentModal: FC<ModalProps> = ({ open, closeModal }) => {
             <Grid item>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Typography gutterBottom variant="h6" component="div">
-                  Hora de atencion
+                  Hora de atención <b style={{ color: "red" }}>*</b>
                 </Typography>
                 <TimePicker
                   onChange={handleChangeHour}
@@ -158,7 +159,18 @@ const NewAppointmentModal: FC<ModalProps> = ({ open, closeModal }) => {
               </Button>
             </Grid>
             <Grid item>
-              <Button type="submit" variant="contained" color="primary">
+              <Button
+                disabled={
+                  !formik.isValid ||
+                  !formik.values.date ||
+                  !formik.values.hour ||
+                  !formik.values.plateNumber
+                }
+                type="submit"
+                variant="contained"
+                color="primary"
+                startIcon={<SaveOutlinedIcon />}
+              >
                 Guardar
               </Button>
             </Grid>

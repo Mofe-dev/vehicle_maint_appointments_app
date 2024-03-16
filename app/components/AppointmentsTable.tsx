@@ -23,11 +23,21 @@ const AppointmentsTable: FC<TableProps> = ({ appointments }) => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Placa</TableCell>
-              <TableCell align="right">Fecha reserva</TableCell>
-              <TableCell align="right">Estado de la reserva</TableCell>
-              <TableCell align="right">Hora</TableCell>
-              <TableCell align="right">Estado</TableCell>
+              <TableCell>
+                <b>Placa</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Fecha reserva</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Estado de la reserva</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Hora</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Estado</b>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -39,11 +49,11 @@ const AppointmentsTable: FC<TableProps> = ({ appointments }) => {
                 <TableCell component="th" scope="row">
                   {row.PlateNumber}
                 </TableCell>
-                <TableCell align="right">{row.BookingDate}</TableCell>
-                <TableCell align="right">{row.BookingStatus}</TableCell>
+                <TableCell align="center">{row.BookingDate}</TableCell>
+                <TableCell align="center">{row.BookingStatus}</TableCell>
 
-                <TableCell align="right">{row.Hour}</TableCell>
-                <TableCell align="right">
+                <TableCell align="center">{row.Hour}</TableCell>
+                <TableCell align="center">
                   {row.Status ? (
                     <Chip label="Activo" color="success" />
                   ) : (
