@@ -1,95 +1,144 @@
-import Image from "next/image";
+"use client";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+
 import styles from "./page.module.css";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { Container, Grid, TextField } from "@mui/material";
+import { useState } from "react";
+import AppointmentsTable from "./components/AppointmentsTable";
+import { API_URL } from "./utils/const";
+import NewAppointmentModal from "./components/NewAppointmentModal";
 
 export default function Home() {
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [notFound, setNotFound] = useState<boolean>(false);
+
+  const [open, setOpen] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      plateNumber: "",
+    },
+    validationSchema: Yup.object().shape({
+      plateNumber: Yup.string().required("El # de placa es requerido"),
+    }),
+    onSubmit: async (values) => {
+      console.log("PlateNumber: ", values.plateNumber);
+
+      searchAppointments(values.plateNumber);
+    },
+  });
+
+  const searchAppointments = async (plateNumber: string) => {
+    setNotFound(false);
+
+    await fetch(`${API_URL}/Booking/GetBookings?PlateNumber=${plateNumber}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) return response.json();
+      })
+      .then(({ Data }: any) => {
+        console.log(Data);
+        if (Data && Data.length > 0) setAppointments([...Data]);
+        else setNotFound(true);
+      });
+  };
+
+  const handleNewAppointments = () => {
+    setOpen(!open);
+  };
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+      <Container>
+        <Typography
+          gutterBottom
+          variant="h4"
+          component="div"
+          textAlign="center"
+        >
+          Aplicacion de reserva de citas para mantenimiento de autos
+        </Typography>
+
+        <Container
+          sx={{
+            paddingY: 5,
+            paddingX: 10,
+            border: 1,
+            borderColor: "#0101",
+            borderRadius: 5,
+          }}
+        >
+          <Grid container justifyContent="flex-end" alignItems="center" mb={5}>
+            <Grid item>
+              <Button
+                type="submit"
+                variant="contained"
+                onClick={handleNewAppointments}
+              >
+                Agendar nueva cita
+              </Button>
+            </Grid>
+          </Grid>
+
+          <Card>
+            <CardContent>
+              <Typography gutterBottom variant="h4" component="div">
+                Buscador de citas
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Ingrese la informacion solicitada para ver informacion de sus
+                citas
+              </Typography>
+              <form onSubmit={formik.handleSubmit}>
+                <Grid container mt={2}>
+                  <Grid item>
+                    <Typography gutterBottom variant="h6" component="div">
+                      Numero de la placa
+                    </Typography>
+                    <TextField
+                      {...formik.getFieldProps("plateNumber")}
+                      id="outlined-basic"
+                      label="#"
+                      variant="outlined"
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container justifyContent="flex-end" alignItems="center">
+                  <Grid item>
+                    <Button type="submit" variant="contained">
+                      Buscar cita
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+            </CardContent>
+            {/* <CardActions sx={{ display: "flex", justifyContent: "end" }}>
+       
+        </CardActions> */}
+          </Card>
+          {open && (
+            <NewAppointmentModal
+              open={open}
+              closeModal={handleNewAppointments}
             />
-          </a>
-        </div>
-      </div>
+          )}
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+          {appointments && appointments.length > 0 && (
+            <AppointmentsTable appointments={appointments} />
+          )}
+          {notFound && <>No se encontraron registros</>}
+        </Container>
+      </Container>
     </main>
   );
 }
